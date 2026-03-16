@@ -1,0 +1,66 @@
+{
+  "Technician_Van_Stock": {
+    "HYD-GSKT-4402": {
+      "description": "Hydraulic Press Gasket Kit, 440-series",
+      "quantity": 0,
+      "unit": "kit",
+      "bin_location": "VAN-BIN-A3"
+    },
+    "ORB-SEAL-0812": {
+      "description": "O-Ring Seal, 8mm x 12mm, Nitrile",
+      "quantity": 4,
+      "unit": "pcs",
+      "bin_location": "VAN-BIN-B1"
+    },
+    "HYD-FLTR-2200": {
+      "description": "Hydraulic Oil Filter, 22-micron",
+      "quantity": 2,
+      "unit": "pcs",
+      "bin_location": "VAN-BIN-A1"
+    },
+    "CTRL-PCB-EX4": {
+      "description": "Control PCB, EX4 Series Controller",
+      "quantity": 1,
+      "unit": "pcs",
+      "bin_location": "VAN-BIN-C2"
+    },
+    "TORQ-SNSR-09": {
+      "description": "Torque Sensor, 0-900 Nm range",
+      "quantity": 0,
+      "unit": "pcs",
+      "bin_location": "VAN-BIN-D1"
+    }
+  },
+  "Warehouse_B": {
+    "HYD-GSKT-4402": {
+      "description": "Hydraulic Press Gasket Kit, 440-series",
+      "quantity": 14,
+      "unit": "kit",
+      "bin_location": "WH-B-ROW-12"
+    },
+    "TORQ-SNSR-09": {
+      "description": "Torque Sensor, 0-900 Nm range",
+      "quantity": 3,
+      "unit": "pcs",
+      "bin_location": "WH-B-ROW-07"
+    },
+    "PNEU-VLV-P3": {
+      "description": "Pneumatic Solenoid Valve, 3/2-way",
+      "quantity": 8,
+      "unit": "pcs",
+      "bin_location": "WH-B-ROW-03"
+    },
+    "CTRL-PCB-EX4": {
+      "description": "Control PCB, EX4 Series Controller",
+      "quantity": 2,
+      "unit": "pcs",
+      "bin_location": "WH-B-ROW-15"
+    },
+    "BEAR-6205-2RS": {
+      "description": "Deep Groove Ball Bearing, 6205-2RS",
+      "quantity": 25,
+      "unit": "pcs",
+      "bin_location": "WH-B-ROW-01"
+    }
+  }
+}
