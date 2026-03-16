@@ -10,7 +10,8 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from .state import AgentState
 from .tools import get_retriever, check_inventory, search_warehouse_b
 
-GRANITE_MODEL = os.getenv("GRANITE_MODEL", "granite3.1-dense:8b")
+# ── granite-docling:latest is IBM's 258M document-intelligence model ──
+GRANITE_MODEL = os.getenv("GRANITE_MODEL", "granite-docling:latest")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
 
@@ -22,7 +23,7 @@ def _get_llm(temperature: float = 0.1):
     )
 
 
-# ── Node 1: Technical Expert (RAG) ──────────────────────────────
+# ── Node 1: Technical Expert (RAG) ──────────────────────────────────────
 
 TECHNICAL_SYSTEM_PROMPT = """\
 You are Atlas-G Technical Expert, a precise assistant for field service technicians.
@@ -45,14 +46,12 @@ def technical_expert_node(state: AgentState) -> AgentState:
     llm = _get_llm()
     retriever = get_retriever()
 
-    # Get the latest human message as the query
     last_human = next(
         (m for m in reversed(state["messages"]) if isinstance(m, HumanMessage)),
         None,
     )
     query = last_human.content if last_human else ""
 
-    # Build RAG chain
     prompt = ChatPromptTemplate.from_messages([
         ("system", TECHNICAL_SYSTEM_PROMPT),
         MessagesPlaceholder("chat_history"),
@@ -68,7 +67,6 @@ def technical_expert_node(state: AgentState) -> AgentState:
 
     answer = result["answer"]
 
-    # — Parse part numbers out of response —
     part_match = re.search(r"PART_NUMBERS:\s*\[([^\]]+)\]", answer)
     part_numbers = []
     if part_match:
@@ -86,10 +84,10 @@ def technical_expert_node(state: AgentState) -> AgentState:
     }
 
 
-# ── Node 2: Inventory Checker (Tool-Calling) ───────────────────────
+# ── Node 2: Inventory Checker (Tool-Calling) ────────────────────────────
 
 INVENTORY_SYSTEM_PROMPT = """\
-You are Atlas-G Inventory Checker. A Technical Expert has identified part numbers needed 
+You are Atlas-G Inventory Checker. A Technical Expert has identified part numbers needed
 for a repair. Your job is to:
 1. Check van stock and warehouse availability using the tools provided.
 2. Give a clear, actionable inventory report to the field technician.
@@ -126,7 +124,6 @@ def inventory_checker_node(state: AgentState) -> AgentState:
         content=f"Check inventory for these parts: {', '.join(parts)}"
     )
 
-    # First LLM call — may produce tool calls
     response = llm_with_tools.invoke([system_msg, human_msg])
 
     inventory_results = []
@@ -141,7 +138,6 @@ def inventory_checker_node(state: AgentState) -> AgentState:
                 inventory_results.append({"tool": tc["name"], "args": tc["args"], "result": result})
                 tool_outputs.append(f"[{tc['name']}] {result}")
 
-        # Second LLM call to synthesise tool outputs into natural language
         synthesis_prompt = [
             system_msg,
             human_msg,
